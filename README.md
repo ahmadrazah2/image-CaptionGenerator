@@ -55,7 +55,7 @@ pip install streamlit transformers torch pillow
 ### 3️⃣ Run the app
 
 ```bash
-streamlit run app.py
+streamlit run streamlit_app.py
 ```
 
 Open in browser:
