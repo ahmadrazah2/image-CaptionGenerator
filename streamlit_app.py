@@ -7,15 +7,20 @@ from transformers import pipeline
 # Page config
 st.set_page_config(page_title="Image Caption Generator", page_icon="✨", layout="wide")
 
-# Load model once
 @st.cache_resource
 def load_captioner():
-    device = torch.device("mps") if torch.backends.mps.is_available() else torch.device("cpu")
+    # Streamlit Cloud uses CPU. This logic handles both environments.
+    if torch.cuda.is_available():
+        device = 0  # NVIDIA GPU
+    elif torch.backends.mps.is_available():
+        device = "mps" # Apple Silicon
+    else:
+        device = -1 # CPU (Streamlit Cloud default)
+    
     return pipeline(
         "image-to-text",
         model="Salesforce/blip-image-captioning-base",
-        device=device,
-    
+        device=device
     )
 
 captioner = load_captioner()
